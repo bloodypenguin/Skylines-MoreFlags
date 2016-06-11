@@ -252,6 +252,18 @@
     <EmbeddedResource Include="thumbs\flag_europe_small_thumb.png" />
     <EmbeddedResource Include="thumbs\flag_europe_small_thumbwall.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="flags\flag_america_central2_lod.png" />
+    <EmbeddedResource Include="flags\flag_america_central3.png" />
+    <EmbeddedResource Include="flags\flag_america_central3_lod.png" />
+    <EmbeddedResource Include="flags\flag_america_central2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="thumbs\flag_america_central3_thumb.png" />
+    <EmbeddedResource Include="thumbs\flag_america_central3_thumbwall.png" />
+    <EmbeddedResource Include="thumbs\flag_america_central2_thumb.png" />
+    <EmbeddedResource Include="thumbs\flag_america_central2_thumbwall.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>mkdir "%25LOCALAPPDATA%25\Colossal Order\Cities_Skylines\Addons\Mods\$(ProjectName)"
