@@ -204,6 +204,10 @@ namespace MoreFlags
 
         public void OnPostPropInit(PropInfo prop)
         {
+            if (OptionsHolder.Options.replacement == string.Empty)
+            {
+                return;
+            }
             if (prop == null)
             {
                 return;
