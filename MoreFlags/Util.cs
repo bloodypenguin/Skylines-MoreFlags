@@ -55,6 +55,10 @@ namespace MoreFlags
 
         public static Texture2D LoadTextureFromFile(string path, bool readOnly = false)
         {
+            if (!File.Exists(path))
+            {
+                return null;
+            }
             try
             {
                 using (var textureStream = File.OpenRead(path))
