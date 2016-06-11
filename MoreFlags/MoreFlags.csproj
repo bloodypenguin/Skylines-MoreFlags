@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Flag.cs" />
+    <Compile Include="FlagsCollection.cs" />
     <Compile Include="LoadingExtension.cs" />
     <Compile Include="Mod.cs" />
     <Compile Include="Options.cs" />
@@ -160,12 +161,15 @@
   <ItemGroup>
     <EmbeddedResource Include="flags\flag_mcu_teams.png" />
     <EmbeddedResource Include="flags\flag_mcu_teams_lod.png" />
-   </ItemGroup>
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="flags\flag_asia_middle_east2.png" />
     <EmbeddedResource Include="flags\flag_asia_middle_east2_lod.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="flags\flag_africa_south2.png" />
+    <EmbeddedResource Include="flags\flag_africa_south2_lod.png" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="thumbs\flag_africa_north1_thumb.png" />
     <EmbeddedResource Include="thumbs\flag_africa_north1_thumbwall.png" />
@@ -227,6 +231,10 @@
     <EmbeddedResource Include="thumbs\flag_un_thumbwall.png" />
     <EmbeddedResource Include="thumbs\flag_us_thumb.png" />
     <EmbeddedResource Include="thumbs\flag_us_thumbwall.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="thumbs\flag_africa_south2_thumb.png" />
+    <EmbeddedResource Include="thumbs\flag_africa_south2_thumbwall.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

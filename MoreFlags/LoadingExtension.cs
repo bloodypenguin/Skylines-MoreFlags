@@ -22,6 +22,7 @@ namespace MoreFlags
             new[]{ "europe_vanilla", "Europe Vanilla", "UK, Germany, France, Belgium, Italy and Spain flags"},
             new[]{ "africa_north1", "Africa North #1", "Egypt, Lybia, Morocco, Tunisia, Algeria, Western Sahara flags"},
             new[]{ "africa_south1", "Africa South #1", "Namibia, Botswana, Swaziland, Lesotho, Zimbabwe, Mozambique flags"},
+            new[]{ "africa_south2", "Africa South #2", "South Africa, Angola, Zambia, Malawi, Comoros, Mauritius flags"},
             new[]{ "asia", "Asia East", "Korea, North Korea, Taiwan, China, Mongolia, Japan flags"},
             new[]{ "asia_central", "Asia Central", "Kazakhstan, Kyrgyzstan, Afghanistan, Tajikistan, Uzbekistan, Turkmenistan flags"},
             new[]{ "asia_middle_east1", "Asia Middle East #1", "Yemen, Israel, Jordan, Lebannon, Syria, Saudi Arabia flags"},
@@ -31,7 +32,7 @@ namespace MoreFlags
             new[]{ "bloody", "BloodyPenguin", "BloodyPenguin flag"},
             new[]{ "central_america", "Central America", "Cuba, Mexico, Jamaica, Dominican Republic, Bahamas, Panama flags"},
             new[]{ "christian", "Christian", "Christian flag"},
-            new[]{ "commonwealth", "Commonwealth", "Canada, India, Australia, South Africa, Papua New Guinea, Pakistan flags"},
+            new[]{ "commonwealth", "Commonwealth", "Canada, India, Australia, New Zealand, Papua New Guinea, Pakistan flags"},
             new[]{ "eu", "European Union", "European Union flag"},
             new[]{ "europe_central", "Europe Central", "Estonia, Latvia, Lithuania, Poland, Czech Republic, Slovakia flags"},
             new[]{ "europe_east", "Europe East", "Ukraine, Russia, Belarus flags"},
@@ -68,10 +69,10 @@ namespace MoreFlags
                                      id = id,
                                      description = flag[1],
                                      extendedDescripton = flag[2],
-                                     texture = Util.LoadTextureFromAssembly($"MoreFlags.flags.flag_{id}.png", false),
-                                     textureLod = Util.LoadTextureFromAssembly($"MoreFlags.flags.flag_{id}_lod.png", false),
-                                     thumb = Util.LoadTextureFromAssembly($"MoreFlags.thumbs.flag_{id}_thumb.png", false),
-                                     thumbWall = Util.LoadTextureFromAssembly($"MoreFlags.thumbs.flag_{id}_thumbwall.png", false)
+                                     texture = InitializeTexture($"MoreFlags.flags.flag_{id}.png"),
+                                     textureLod = InitializeTexture($"MoreFlags.flags.flag_{id}_lod.png"),
+                                     thumb = InitializeTexture($"MoreFlags.thumbs.flag_{id}_thumb.png"),
+                                     thumbWall = InitializeTexture($"MoreFlags.thumbs.flag_{id}_thumbwall.png")
                                  }).ToList();
                 try
                 {
@@ -131,6 +132,11 @@ namespace MoreFlags
             }
         }
 
+        private static Texture2D InitializeTexture(string path)
+        {
+            return Util.LoadTextureFromAssembly(path, false);
+        }
+
         public override void OnCreated(ILoading loading)
         {
             base.OnCreated(loading);
@@ -177,6 +183,14 @@ namespace MoreFlags
             {
                 return;
             }
+            var isWall = "flag_pole_wall".Equals(prop.name);
+            var counter = prop.m_UIPriority;
+            foreach (var prefab in Flags
+                .Where(flag => flag.plugin == null || flag.plugin.isEnabled)
+                .Select(flag => Clone(prop, flag, isWall)))
+            {
+                prefab.m_UIPriority = ++counter;
+            }
             if (OptionsHolder.Options.replacement != string.Empty)
             {
                 foreach (var flag in Flags.Where(flag => (flag.plugin == null || flag.plugin.isEnabled) && flag.id == OptionsHolder.Options.replacement))
@@ -185,38 +199,39 @@ namespace MoreFlags
                     break;
                 }
             }
-            var isWall = "flag_pole_wall".Equals(prop.name);
-            LoadingManager.instance.QueueLoadingAction(Util.ActionWrapper(() =>
-            {
-                var counter = prop.m_UIPriority;
-                foreach (var prefab in Flags
-                .Where(flag => flag.plugin == null || flag.plugin.isEnabled)
-                .Select(flag => Clone(prop, flag, isWall)))
-                {
-                    prefab.m_UIPriority = ++counter;
-                }
-            }));
         }
 
         private static void Replace(PropInfo prop, Flag modification)
         {
-            var material = prop.GetComponent<Renderer>().sharedMaterial;
+            var material = prop.GetComponent<Renderer>().material;
             material.mainTexture = modification.texture;
-            var lodMaterial = prop.m_lodObject.GetComponent<Renderer>().sharedMaterial;
+            var lodMaterial = prop.m_lodObject.GetComponent<Renderer>().material;
             lodMaterial.mainTexture = modification.textureLod;
         }
 
         private static PropInfo Clone(PropInfo prop, Flag modification, bool isWall)
         {
             var gameObject = GameObject.Find("MoreFlags") ?? new GameObject("MoreFlags");
-            var clone = Util.ClonePrefab(prop, prop.name + $"_{modification.id}", gameObject.transform);
+            var collection = gameObject.GetComponent<FlagsCollection>() ?? gameObject.AddComponent<FlagsCollection>();
+            var instance = Object.Instantiate(prop.gameObject);
+            var clone = instance.GetComponent<PropInfo>();
+            clone.name = prop.name + $"_{modification.id}";
+            instance.name = prop.name + $"_{modification.id}";
+            instance.transform.parent = gameObject.transform;
+            clone.GetComponent<Renderer>().material.mainTexture = modification.texture;
+            clone.GetComponent<Renderer>().material.name = $"{prop.GetComponent<Renderer>().material.name}_{modification.id}";
+            clone.m_lodObject = Object.Instantiate(prop.m_lodObject);
+            clone.m_lodObject.transform.parent = instance.transform;
+            clone.m_lodObject.name = prop.m_lodObject.name + $"_{modification.id}";
+            var renderer = clone.m_lodObject.GetComponent<MeshRenderer>();
+            Object.DestroyImmediate(renderer);
+            renderer = clone.m_lodObject.AddComponent<MeshRenderer>();
+            renderer.material= new Material(prop.m_lodObject.GetComponent<Renderer>().sharedMaterial)
+            {
+                mainTexture = modification.textureLod,
+                name = $"{prop.m_lodObject.GetComponent<Renderer>().sharedMaterial.name}_{modification.id}"
+            };
             PrefabCollection<PropInfo>.InitializePrefabs("MoreFlags", new[] { clone }, null);
-            clone.m_material = Object.Instantiate(prop.m_material);
-            clone.m_material.name = prop.m_material.name + $"_{modification.id}";
-            clone.m_material.mainTexture = modification.texture;
-            clone.m_lodMaterial = Object.Instantiate(prop.m_lodMaterial);
-            clone.m_lodMaterial.name = prop.m_lodMaterial.name + $"_{modification.id}";
-            clone.m_lodMaterial.mainTexture = modification.textureLod;
             clone.m_placementStyle = ItemClass.Placement.Manual;
             clone.m_createRuining = false;
             clone.m_Atlas = _atlas;
@@ -241,6 +256,7 @@ namespace MoreFlags
             {
                 locale.AddLocalizedString(key, $"{extendedDescription} ({versionStr} version)");
             }
+            collection.flags.Add(clone);
             return clone;
         }
 

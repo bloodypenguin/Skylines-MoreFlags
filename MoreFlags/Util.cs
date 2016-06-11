@@ -87,19 +87,6 @@ namespace MoreFlags
             return tex;
         }
 
-        public static PropInfo ClonePrefab(PropInfo originalPrefab, string newName, Transform parentTransform)
-        {
-            var instance = Object.Instantiate(originalPrefab);
-            instance.name = newName;
-            instance.transform.SetParent(parentTransform);
-            instance.transform.localPosition = new Vector3(-7500, -7500, -7500);
-            instance.m_generatedInfo = Object.Instantiate(originalPrefab.m_generatedInfo);
-            instance.m_generatedInfo.name = newName + " (GeneratedInfo)";
-            instance.m_generatedInfo.m_propInfo = null;
-            instance.gameObject.SetActive(false);
-            return instance;
-        }
-
         public static bool IsModActive(string modName)
         {
             var plugins = PluginManager.instance.GetPluginsInfo();
