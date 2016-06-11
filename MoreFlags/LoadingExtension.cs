@@ -215,8 +215,9 @@ namespace MoreFlags
             var collection = gameObject.GetComponent<FlagsCollection>() ?? gameObject.AddComponent<FlagsCollection>();
             var instance = Object.Instantiate(prop.gameObject);
             var clone = instance.GetComponent<PropInfo>();
-            clone.name = prop.name + $"_{modification.id}";
-            instance.name = prop.name + $"_{modification.id}";
+            var name = $"{prop.name}_{modification.id}";
+            clone.name = name;
+            instance.name = name;
             instance.transform.parent = gameObject.transform;
             clone.GetComponent<Renderer>().material.mainTexture = modification.texture;
             clone.GetComponent<Renderer>().material.name = $"{prop.GetComponent<Renderer>().material.name}_{modification.id}";
@@ -231,7 +232,6 @@ namespace MoreFlags
                 mainTexture = modification.textureLod,
                 name = $"{prop.m_lodObject.GetComponent<Renderer>().sharedMaterial.name}_{modification.id}"
             };
-            PrefabCollection<PropInfo>.InitializePrefabs("MoreFlags", new[] { clone }, null);
             clone.m_placementStyle = ItemClass.Placement.Manual;
             clone.m_createRuining = false;
             clone.m_Atlas = _atlas;
@@ -242,22 +242,19 @@ namespace MoreFlags
                 clone.m_Thumbnail = thumb.name;
                 clone.m_InfoTooltipThumbnail = thumb.name;
             }
-            var locale = (Locale)LocaleField.GetValue(SingletonLite<LocaleManager>.instance);
-            var key = new Locale.Key { m_Identifier = "PROPS_TITLE", m_Key = clone.name };
+            PrefabCollection<PropInfo>.InitializePrefabs("MoreFlags", new[] { clone }, null);
+            AddLocale(modification, isWall, name);
+            collection.flags.Add(clone);
+            return clone;
+        }
+
+        private static void AddLocale(Flag modification, bool isWall, string name)
+        {
             var versionStr = isWall ? "wall" : "ground";
             var extendedDescription =
                 modification.extendedDescripton == string.Empty ? modification.description : modification.extendedDescripton;
-            if (!locale.Exists(key))
-            {
-                locale.AddLocalizedString(key, $"{modification.description} ({versionStr} version)");
-            }
-            key = new Locale.Key { m_Identifier = "PROPS_DESC", m_Key = clone.name };
-            if (!locale.Exists(key))
-            {
-                locale.AddLocalizedString(key, $"{extendedDescription} ({versionStr} version)");
-            }
-            collection.flags.Add(clone);
-            return clone;
+            Util.AddLocale("PROPS", name, $"{modification.description} ({versionStr} version)",
+                $"{extendedDescription} ({versionStr} version)");
         }
 
         private static bool IsHooked()
