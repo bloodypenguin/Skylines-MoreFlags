@@ -53,7 +53,7 @@ namespace MoreFlags
             }
         }
 
-        public static Texture2D LoadTextureFromFile(string path, bool readOnly = true)
+        public static Texture2D LoadTextureFromFile(string path, bool readOnly = false)
         {
             try
             {
@@ -106,8 +106,10 @@ namespace MoreFlags
             textureStream.Close();
             var tex = new Texture2D(2, 2, TextureFormat.ARGB32, false);
             tex.LoadImage(buf);
-            tex.Apply(false, readOnly);
             tex.name = Guid.NewGuid().ToString();
+            tex.filterMode = FilterMode.Bilinear;
+            tex.Compress(false);
+            tex.Apply(false, readOnly);
             return tex;
         }
 

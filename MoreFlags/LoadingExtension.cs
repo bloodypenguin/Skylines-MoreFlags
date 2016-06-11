@@ -103,7 +103,7 @@ namespace MoreFlags
                                 plugin = plugin,
                                 id = plugin.publishedFileID + "." + id,
                                 description = flag[1],
-                                texture = Util.LoadTextureFromFile(Path.Combine(plugin.modPath, $"flag_{id}.png"), false),
+                                texture = Util.LoadTextureFromFile(Path.Combine(plugin.modPath, $"flag_{id}.png"), true),
                                 textureLod = Util.LoadTextureFromFile(Path.Combine(plugin.modPath, $"flag_{id}_lod.png"), false),
                                 thumb = Util.LoadTextureFromFile(Path.Combine(plugin.modPath, $"flag_{id}_thumb.png"), false),
                                 thumbWall = Util.LoadTextureFromFile(Path.Combine(plugin.modPath, $"flag_{id}_thumbwall.png"), false)
@@ -145,6 +145,7 @@ namespace MoreFlags
                 return;
             }
             PropInfoHook.OnPreInitialization += OnPrePropInit;
+            PropInfoHook.OnPostInitialization += OnPostPropInit;
             PropInfoHook.Deploy();
         }
 
@@ -201,6 +202,19 @@ namespace MoreFlags
             }
         }
 
+        public void OnPostPropInit(PropInfo prop)
+        {
+            if (prop == null)
+            {
+                return;
+            }
+            if (prop.name != "flag_pole_wall" && prop.name != "flag_pole")
+            {
+                return;
+            }
+            ApplyRenderDistanceHack(prop);
+        }
+
         private static void Replace(PropInfo prop, Flag modification)
         {
             var material = prop.GetComponent<Renderer>().material;
@@ -221,17 +235,17 @@ namespace MoreFlags
             instance.transform.parent = gameObject.transform;
             clone.GetComponent<Renderer>().material.mainTexture = modification.texture;
             clone.GetComponent<Renderer>().material.name = $"{prop.GetComponent<Renderer>().material.name}_{modification.id}";
-            clone.m_lodObject = Object.Instantiate(prop.m_lodObject);
-            clone.m_lodObject.transform.parent = instance.transform;
-            clone.m_lodObject.name = prop.m_lodObject.name + $"_{modification.id}";
-            var renderer = clone.m_lodObject.GetComponent<MeshRenderer>();
-            Object.DestroyImmediate(renderer);
-            renderer = clone.m_lodObject.AddComponent<MeshRenderer>();
-            renderer.material= new Material(prop.m_lodObject.GetComponent<Renderer>().sharedMaterial)
-            {
-                mainTexture = modification.textureLod,
-                name = $"{prop.m_lodObject.GetComponent<Renderer>().sharedMaterial.name}_{modification.id}"
-            };
+//            clone.m_lodObject = Object.Instantiate(prop.m_lodObject);
+//            clone.m_lodObject.transform.parent = instance.transform;
+//            clone.m_lodObject.name = prop.m_lodObject.name + $"_{modification.id}";
+//            var renderer = clone.m_lodObject.GetComponent<MeshRenderer>();
+//            Object.DestroyImmediate(renderer);
+//            renderer = clone.m_lodObject.AddComponent<MeshRenderer>();
+//            renderer.material= new Material(prop.m_lodObject.GetComponent<Renderer>().sharedMaterial)
+//            {
+//                mainTexture = modification.textureLod,
+//                name = $"{prop.m_lodObject.GetComponent<Renderer>().sharedMaterial.name}_{modification.id}"
+//            };
             clone.m_placementStyle = ItemClass.Placement.Manual;
             clone.m_createRuining = false;
             clone.m_Atlas = _atlas;
@@ -243,9 +257,17 @@ namespace MoreFlags
                 clone.m_InfoTooltipThumbnail = thumb.name;
             }
             PrefabCollection<PropInfo>.InitializePrefabs("MoreFlags", new[] { clone }, null);
+            ApplyRenderDistanceHack(clone);
             AddLocale(modification, isWall, name);
             collection.flags.Add(clone);
             return clone;
+        }
+
+        //hack to always render main model instad of LOD. Should be after initializing
+        private static void ApplyRenderDistanceHack(PropInfo flag)
+        {
+            flag.m_maxRenderDistance = 590; 
+            flag.m_lodRenderDistance = 590;
         }
 
         private static void AddLocale(Flag modification, bool isWall, string name)
