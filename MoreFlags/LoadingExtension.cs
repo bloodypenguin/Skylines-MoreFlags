@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using ColossalFramework;
-using ColossalFramework.Globalization;
 using ColossalFramework.Plugins;
 using ColossalFramework.UI;
 using ICities;
@@ -16,7 +13,6 @@ namespace MoreFlags
 {
     public class LoadingExtension : LoadingExtensionBase
     {
-        private static readonly FieldInfo LocaleField = typeof(LocaleManager).GetField("m_Locale", BindingFlags.NonPublic | BindingFlags.Instance);
         private static List<Flag> m_flags;
         private static readonly string[][] DefaultFlags = {
             new[]{ "europe_vanilla", "Europe Vanilla", "UK, Germany, France, Belgium, Italy and Spain flags"},
@@ -30,11 +26,13 @@ namespace MoreFlags
             new[]{ "asia_south", "Asia South", "Myanmar, Laos, Bangladesh, Bhutan, Nepal, Cambodia flags"},
             new[]{ "asia_southeast", "Asia Southeast", "Vietnam, Indonesia, Philippines, Thailand, Malaysia, Singapore flags"},
             new[]{ "bloody", "BloodyPenguin", "BloodyPenguin flag"},
-            new[]{ "central_america", "Central America", "Cuba, Mexico, Jamaica, Dominican Republic, Bahamas, Panama flags"},
+            new[]{ "historical", "Historical flags", "Yugoslavia, Kingdom or Ararat, Tibet, East Germany, Confederate, Russian Empire flags"},
+            new[]{ "central_america", "Central America #1", "Cuba, Mexico, Jamaica, Dominican Republic, Bahamas, Panama flags"},
             new[]{ "christian", "Christian", "Christian flag"},
             new[]{ "commonwealth", "Commonwealth", "Canada, India, Australia, New Zealand, Papua New Guinea, Pakistan flags"},
             new[]{ "eu", "European Union", "European Union flag"},
             new[]{ "europe_central", "Europe Central", "Estonia, Latvia, Lithuania, Poland, Czech Republic, Slovakia flags"},
+            new[]{ "europe_small", "Europe Small States", "Faroe Islands, Andorra, Monaco, Vatican City, San Marino, Liechtenstein flags"},
             new[]{ "europe_east", "Europe East", "Ukraine, Russia, Belarus flags"},
             new[]{ "europe_north", "Europe North", "Norway, Finland, Iceland, Sweden, Denmark, Ireland flags"},
             new[]{ "europe_south", "Europe South", "Greece, Georgia, Turkey, Armenia, Azerbadian, Cyprus flags"},

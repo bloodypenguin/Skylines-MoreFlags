@@ -236,6 +236,22 @@
     <EmbeddedResource Include="thumbs\flag_africa_south2_thumb.png" />
     <EmbeddedResource Include="thumbs\flag_africa_south2_thumbwall.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="thumbs\flag_historical_thumb.png" />
+    <EmbeddedResource Include="thumbs\flag_historical_thumbwall.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="flags\flag_historical.png" />
+    <EmbeddedResource Include="flags\flag_historical_lod.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="flags\flag_europe_small.png" />
+    <EmbeddedResource Include="flags\flag_europe_small_lod.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="thumbs\flag_europe_small_thumb.png" />
+    <EmbeddedResource Include="thumbs\flag_europe_small_thumbwall.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>mkdir "%25LOCALAPPDATA%25\Colossal Order\Cities_Skylines\Addons\Mods\$(ProjectName)"
