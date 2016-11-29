@@ -12,35 +12,36 @@ namespace MoreFlags
         private Texture2D m_thumbWall;
 
         public string id;
+        public string flagName;
         public string description;
         public string extendedDescripton;
 
         public Texture2D texture => m_texture ??
                                     (m_texture =
-                                        id.Contains(".")
-                                            ? Util.LoadTextureFromFile(Path.Combine(plugin.modPath, $"flag_{id}.png"), true)
-                                            : InitializeTexture($"MoreFlags.flags.flag_{id}.png"));
+                                        plugin != null
+                                            ? Util.LoadTextureFromFile(Path.Combine(plugin.modPath, $"flag_{flagName}.png"), $"flag_{id}", true)
+                                            : InitializeTexture($"MoreFlags.flags.flag_{flagName}.png", $"flag_{id}", true));
 
         public Texture2D textureLod => m_textureLod ??
                                     (m_textureLod =
-                                        id.Contains(".")
-                                            ? Util.LoadTextureFromFile(Path.Combine(plugin.modPath, $"flag_{id}_lod.png"), false)
-                                            : InitializeTexture($"MoreFlags.flags.flag_{id}_lod.png"));
+                                        plugin != null
+                                            ? Util.LoadTextureFromFile(Path.Combine(plugin.modPath, $"flag_{flagName}_lod.png"), $"flag_{id}_lod")
+                                            : InitializeTexture($"MoreFlags.flags.flag_{flagName}_lod.png", $"flag_{id}_lod"));
         public Texture2D thumb => m_thumb ??
                                     (m_thumb =
-                                        id.Contains(".")
-                                            ? Util.LoadTextureFromFile(Path.Combine(plugin.modPath, $"flag_{id}_thumb.png"), false)
-                                            : InitializeTexture($"MoreFlags.thumbs.flag_{id}_thumb.png"));
+                                        plugin != null
+                                            ? Util.LoadTextureFromFile(Path.Combine(plugin.modPath, $"flag_{flagName}_thumb.png"), $"flag_{id}_thumb")
+                                            : InitializeTexture($"MoreFlags.thumbs.flag_{flagName}_thumb.png", $"flag_{id}_thumb"));
         public Texture2D thumbWall => m_thumbWall ??
                                     (m_thumbWall =
-                                        id.Contains(".")
-                                            ? Util.LoadTextureFromFile(Path.Combine(plugin.modPath, $"flag_{id}_thumbwall.png"), false)
-                                            : InitializeTexture($"MoreFlags.thumbs.flag_{id}_thumbwall.png"));
+                                        plugin!=null
+                                            ? Util.LoadTextureFromFile(Path.Combine(plugin.modPath, $"flag_{flagName}_thumbwall.png"), $"flag_{id}_thumbwall")
+                                            : InitializeTexture($"MoreFlags.thumbs.flag_{flagName}_thumbwall.png", $"flag_{id}_thumbwall"));
         public PluginManager.PluginInfo plugin;
 
-        private static Texture2D InitializeTexture(string path)
+        private static Texture2D InitializeTexture(string path, string textureName, bool isReadOnly = false)
         {
-            return Util.LoadTextureFromAssembly(path, false);
+            return Util.LoadTextureFromAssembly(path, textureName, isReadOnly);
         }
     }
 }

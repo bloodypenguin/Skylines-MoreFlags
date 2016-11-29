@@ -87,6 +87,7 @@ namespace MoreFlags
                                  select new Flag
                                  {
                                      id = id,
+                                     flagName = id,
                                      description = flag[1],
                                      extendedDescripton = flag[2],
                                  }).ToList();
@@ -118,6 +119,7 @@ namespace MoreFlags
                             {
                                 plugin = plugin,
                                 id = plugin.publishedFileID + "." + id,
+                                flagName = id,
                                 description = flag[1]
                             };
                             if (flag.Length >= 3)
