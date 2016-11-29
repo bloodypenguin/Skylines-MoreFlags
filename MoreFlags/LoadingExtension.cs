@@ -187,13 +187,16 @@ namespace MoreFlags
             }
             var isWall = "flag_pole_wall".Equals(prop.name);
             var counter = prop.m_UIPriority;
-            foreach (var prefab in Flags
-                .Where(flag => flag.plugin == null || flag.plugin.isEnabled)
-                .Select(flag => Clone(prop, flag, isWall)))
+            var flags = Flags.Where(flag => flag.plugin == null || flag.plugin.isEnabled).ToArray();
+            foreach (var flag in flags)
             {
-                prefab.m_UIPriority = ++counter;
+                var newPrefab = Clone(prop, flag, isWall);
+                newPrefab.m_UIPriority = ++counter;
             }
-            if (OptionsWrapper<Options>.Options.replacement != string.Empty)
+            if (OptionsWrapper<Options>.Options.replacement == string.Empty)
+            {
+                return;
+            }
             {
                 foreach (var flag in Flags.Where(flag => (flag.plugin == null || flag.plugin.isEnabled) && flag.id == OptionsWrapper<Options>.Options.replacement))
                 {
