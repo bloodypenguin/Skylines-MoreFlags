@@ -5,6 +5,7 @@ using System.Linq;
 using ColossalFramework.Plugins;
 using ColossalFramework.UI;
 using ICities;
+using MoreFlags.OptionsFramework;
 using PrefabHook;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -192,9 +193,9 @@ namespace MoreFlags
             {
                 prefab.m_UIPriority = ++counter;
             }
-            if (OptionsHolder.Options.replacement != string.Empty)
+            if (OptionsWrapper<Options>.Options.replacement != string.Empty)
             {
-                foreach (var flag in Flags.Where(flag => (flag.plugin == null || flag.plugin.isEnabled) && flag.id == OptionsHolder.Options.replacement))
+                foreach (var flag in Flags.Where(flag => (flag.plugin == null || flag.plugin.isEnabled) && flag.id == OptionsWrapper<Options>.Options.replacement))
                 {
                     Replace(prop, flag);
                     break;
@@ -204,7 +205,7 @@ namespace MoreFlags
 
         public void OnPostPropInit(PropInfo prop)
         {
-            if (OptionsHolder.Options.replacement == string.Empty)
+            if (OptionsWrapper<Options>.Options.replacement == string.Empty)
             {
                 return;
             }

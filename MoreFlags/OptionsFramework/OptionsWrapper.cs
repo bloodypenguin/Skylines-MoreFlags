@@ -98,7 +98,8 @@ namespace MoreFlags.OptionsFramework
             }
         }
 
-        internal static void SaveOptions()
+        //TODO(earalov): restore as internal
+        public static void SaveOptions()
         {
             try
             {

@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Linq;
 using ICities;
+using MoreFlags.OptionsFramework;
 
 namespace MoreFlags
 {
     public class Mod : IUserMod
     {
-        private static bool _optionsLoaded;
 
         public string Name
         {
             get
             {
-                if (!_optionsLoaded)
-                {
-                    OptionsLoader.LoadOptions();
-                    _optionsLoaded = true;
-                }
+                OptionsWrapper<Options>.Ensure();
                 return "More Flags";
             }
         }
@@ -27,12 +23,12 @@ namespace MoreFlags
         {
             var group = helper.AddGroup("MoreFlags");
             var defaultIndex = 0;
-            if (OptionsHolder.Options.replacement != string.Empty)
+            if (OptionsWrapper<Options>.Options.replacement != string.Empty)
             {
                 for (var i = 0; i < LoadingExtension.Flags.Count; i++)
                 {
                     var flag = LoadingExtension.Flags[i];
-                    if (!flag.id.Equals(OptionsHolder.Options.replacement))
+                    if (!flag.id.Equals(OptionsWrapper<Options>.Options.replacement))
                     {
                         continue;
                     }
@@ -41,16 +37,16 @@ namespace MoreFlags
                 }
                 if (defaultIndex == 0)
                 {
-                    OptionsHolder.Options.replacement = string.Empty;
-                    OptionsLoader.SaveOptions();
+                    OptionsWrapper<Options>.Options.replacement = string.Empty;
+                    OptionsWrapper<Options>.SaveOptions();
                 }
             }
 
             group.AddDropdown("Replace stock Flags with",
                 new[] { "-----" }.Concat(LoadingExtension.Flags.Select(flag => flag.description)).ToArray(), defaultIndex, sel =>
                  {
-                     OptionsHolder.Options.replacement = sel == 0 ? string.Empty : LoadingExtension.Flags[sel - 1].id;
-                     OptionsLoader.SaveOptions();
+                     OptionsWrapper<Options>.Options.replacement = sel == 0 ? string.Empty : LoadingExtension.Flags[sel - 1].id;
+                     OptionsWrapper<Options>.SaveOptions();
                  });
         }
     }
