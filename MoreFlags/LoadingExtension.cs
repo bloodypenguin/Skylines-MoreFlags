@@ -53,7 +53,26 @@ namespace MoreFlags
             new[]{ "us", "United States", "United States flag"}
         };
 
-        private static UITextureAtlas _atlas;
+        private static UITextureAtlas m_atlas;
+
+        private static UITextureAtlas Atlas
+        {
+            get
+            {
+                if (m_atlas != null)
+                {
+                    return m_atlas;
+                }
+                var sprites = new List<Texture2D>();
+                foreach (var flag in Flags)
+                {
+                    sprites.Add(flag.thumb);
+                    sprites.Add(flag.thumbWall);
+                }
+                m_atlas = Util.CreateAtlas(sprites.ToArray());
+                return m_atlas;
+            }
+        }
 
         public static List<Flag> Flags
         {
@@ -70,10 +89,6 @@ namespace MoreFlags
                                      id = id,
                                      description = flag[1],
                                      extendedDescripton = flag[2],
-                                     texture = InitializeTexture($"MoreFlags.flags.flag_{id}.png"),
-                                     textureLod = InitializeTexture($"MoreFlags.flags.flag_{id}_lod.png"),
-                                     thumb = InitializeTexture($"MoreFlags.thumbs.flag_{id}_thumb.png"),
-                                     thumbWall = InitializeTexture($"MoreFlags.thumbs.flag_{id}_thumbwall.png")
                                  }).ToList();
                 try
                 {
@@ -103,11 +118,7 @@ namespace MoreFlags
                             {
                                 plugin = plugin,
                                 id = plugin.publishedFileID + "." + id,
-                                description = flag[1],
-                                texture = Util.LoadTextureFromFile(Path.Combine(plugin.modPath, $"flag_{id}.png"), true),
-                                textureLod = Util.LoadTextureFromFile(Path.Combine(plugin.modPath, $"flag_{id}_lod.png"), false),
-                                thumb = Util.LoadTextureFromFile(Path.Combine(plugin.modPath, $"flag_{id}_thumb.png"), false),
-                                thumbWall = Util.LoadTextureFromFile(Path.Combine(plugin.modPath, $"flag_{id}_thumbwall.png"), false)
+                                description = flag[1]
                             };
                             if (flag.Length >= 3)
                             {
@@ -121,21 +132,9 @@ namespace MoreFlags
                 {
                     Debug.LogException(e);
                 }
-                var sprites = new List<Texture2D>();
-                foreach (var flag in flagsList)
-                {
-                    sprites.Add(flag.thumb);
-                    sprites.Add(flag.thumbWall);
-                }
-                _atlas = Util.CreateAtlas(sprites.ToArray());
                 m_flags = flagsList;
                 return m_flags;
             }
-        }
-
-        private static Texture2D InitializeTexture(string path)
-        {
-            return Util.LoadTextureFromAssembly(path, false);
         }
 
         public override void OnCreated(ILoading loading)
@@ -256,8 +255,8 @@ namespace MoreFlags
 //            };
             clone.m_placementStyle = ItemClass.Placement.Manual;
             clone.m_createRuining = false;
-            clone.m_Atlas = _atlas;
-            clone.m_InfoTooltipAtlas = _atlas;
+            clone.m_Atlas = Atlas;
+            clone.m_InfoTooltipAtlas = Atlas;
             var thumb = isWall ? modification.thumbWall : modification.thumb;
             if (thumb != null)
             {
