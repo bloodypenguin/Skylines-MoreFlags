@@ -113,13 +113,23 @@ namespace MoreFlags
             return Shader.Find("UI/Default UI Shader"); //UIView.GetAView().defaultAtlas.material.shader;
         }
 
-        private static Texture2D LoadTextureFromStream(bool readOnly, string textureName, Stream textureStream)
+        private static Texture2D LoadTextureFromStream(bool readOnly, string textureName, Stream textureStream,
+            float brightnessModifier = 0.75f)
         {
             var buf = new byte[textureStream.Length]; //declare arraysize
             textureStream.Read(buf, 0, buf.Length); // read from stream to byte array
             textureStream.Close();
             var tex = new Texture2D(2, 2, TextureFormat.ARGB32, false);
             tex.LoadImage(buf);
+            for (var x = 0; x < tex.width; x++)
+            {
+                for (var y = 0; y < tex.height; y++)
+                {
+                    var pixel = tex.GetPixel(x, y);
+                    tex.SetPixel(x, y, new Color(pixel.r * brightnessModifier, pixel.g * brightnessModifier, pixel.b * brightnessModifier));
+                }
+            }
+
             tex.name = textureName;
             tex.filterMode = FilterMode.Bilinear;
             tex.Compress(false);
@@ -130,7 +140,7 @@ namespace MoreFlags
         public static Texture2D CloneTexture(Material material, string textureName, bool readOnly = true)
         {
             var texture = (Texture2D) material.GetTexture(textureName);
-            var tex = new Texture2D(texture.width, texture.height, texture.format, false);
+            var tex = new Texture2D(texture.width, texture.height, TextureFormat.ARGB32, false);
             try
             {
                 tex.SetPixels(texture.GetPixels(0, 0, texture.width, texture.height));
@@ -139,6 +149,7 @@ namespace MoreFlags
             {
                 tex.SetPixels(MakeReadable(texture).GetPixels(0, 0, texture.width, texture.height));
             }
+
             tex.name = textureName;
             tex.filterMode = texture.filterMode;
             tex.Compress(false);
