@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{676b27e8-ecf1-4324-a08e-1d16913b56c0}") = "MoreFlags", "MoreFlags/MoreFlags.csproj", "{5F1C961B-2FCA-4F1B-BC10-B2FA4D503F3B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5F1C961B-2FCA-4F1B-BC10-B2FA4D503F3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F1C961B-2FCA-4F1B-BC10-B2FA4D503F3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F1C961B-2FCA-4F1B-BC10-B2FA4D503F3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F1C961B-2FCA-4F1B-BC10-B2FA4D503F3B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
