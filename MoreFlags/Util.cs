@@ -9,7 +9,6 @@ using ColossalFramework.Plugins;
 using ColossalFramework.UI;
 using ICities;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace MoreFlags
 {
@@ -17,19 +16,22 @@ namespace MoreFlags
     {
         public static void AddLocale(string idBase, string key, string title, string description)
         {
-            var localeField = typeof(LocaleManager).GetField("m_Locale", BindingFlags.NonPublic | BindingFlags.Instance);
-            var locale = (Locale)localeField.GetValue(SingletonLite<LocaleManager>.instance);
-            var localeKey = new Locale.Key() { m_Identifier = $"{idBase}_TITLE", m_Key = key };
+            var localeField =
+                typeof(LocaleManager).GetField("m_Locale", BindingFlags.NonPublic | BindingFlags.Instance);
+            var locale = (Locale) localeField.GetValue(SingletonLite<LocaleManager>.instance);
+            var localeKey = new Locale.Key() {m_Identifier = $"{idBase}_TITLE", m_Key = key};
             if (!locale.Exists(localeKey))
             {
                 locale.AddLocalizedString(localeKey, title);
             }
-            localeKey = new Locale.Key() { m_Identifier = $"{idBase}_DESC", m_Key = key };
+
+            localeKey = new Locale.Key() {m_Identifier = $"{idBase}_DESC", m_Key = key};
             if (!locale.Exists(localeKey))
             {
                 locale.AddLocalizedString(localeKey, description);
             }
-            localeKey = new Locale.Key() { m_Identifier = $"{idBase}", m_Key = key };
+
+            localeKey = new Locale.Key() {m_Identifier = $"{idBase}", m_Key = key};
             if (!locale.Exists(localeKey))
             {
                 locale.AddLocalizedString(localeKey, description);
@@ -40,7 +42,7 @@ namespace MoreFlags
         {
             try
             {
-                var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+                var assembly = Assembly.GetExecutingAssembly();
                 using (var textureStream = assembly.GetManifestResourceStream(path))
                 {
                     return LoadTextureFromStream(readOnly, textureName, textureStream);
@@ -48,7 +50,7 @@ namespace MoreFlags
             }
             catch (Exception e)
             {
-                UnityEngine.Debug.LogException(e);
+                Debug.LogException(e);
                 return null;
             }
         }
@@ -57,9 +59,10 @@ namespace MoreFlags
         {
             if (!File.Exists(path))
             {
-                UnityEngine.Debug.LogError($"More Flags - Texture file {path} doesn't exist!");
+                Debug.LogError($"More Flags - Texture file {path} doesn't exist!");
                 return null;
             }
+
             try
             {
                 using (var textureStream = File.OpenRead(path))
@@ -69,7 +72,7 @@ namespace MoreFlags
             }
             catch (Exception e)
             {
-                UnityEngine.Debug.LogException(e);
+                Debug.LogException(e);
                 return null;
             }
         }
@@ -89,6 +92,7 @@ namespace MoreFlags
                 {
                     continue;
                 }
+
                 Rect rect = rects[i];
 
                 UITextureAtlas.SpriteInfo spriteInfo = new UITextureAtlas.SpriteInfo();
@@ -99,6 +103,7 @@ namespace MoreFlags
 
                 atlas.AddSprite(spriteInfo);
             }
+
             atlas.material.mainTexture = texture;
             return atlas;
         }
@@ -122,15 +127,56 @@ namespace MoreFlags
             return tex;
         }
 
+        public static Texture2D CloneTexture(Material material, string textureName, bool readOnly = true)
+        {
+            var texture = (Texture2D) material.GetTexture(textureName);
+            var tex = new Texture2D(texture.width, texture.height, texture.format, false);
+            try
+            {
+                tex.SetPixels(texture.GetPixels(0, 0, texture.width, texture.height));
+            }
+            catch
+            {
+                tex.SetPixels(MakeReadable(texture).GetPixels(0, 0, texture.width, texture.height));
+            }
+            tex.name = textureName;
+            tex.filterMode = texture.filterMode;
+            tex.Compress(false);
+            tex.Apply(false, readOnly);
+            return tex;
+        }
+
+        private static Texture2D MakeReadable(this Texture texture)
+        {
+            var rt = RenderTexture.GetTemporary(texture.width, texture.height, 0);
+            Graphics.Blit(texture, rt);
+            var tex = ToTexture2D(rt);
+            RenderTexture.ReleaseTemporary(rt);
+            return tex;
+        }
+
+        private static Texture2D ToTexture2D(this RenderTexture rt)
+        {
+            var oldRt = RenderTexture.active;
+            RenderTexture.active = rt;
+            var tex = new Texture2D(rt.width, rt.height);
+            tex.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
+            tex.Apply();
+            RenderTexture.active = oldRt;
+            return tex;
+        }
+
         public static bool IsModActive(string modName)
         {
             var plugins = PluginManager.instance.GetPluginsInfo();
             return (from plugin in plugins.Where(p => p.isEnabled)
-                    select plugin.GetInstances<IUserMod>() into instances
-                    where instances.Any()
-                    select instances[0].Name into name
-                    where name == modName
-                    select name).Any();
+                select plugin.GetInstances<IUserMod>()
+                into instances
+                where instances.Any()
+                select instances[0].Name
+                into name
+                where name == modName
+                select name).Any();
         }
 
         public static IEnumerator ActionWrapper(Action a)
