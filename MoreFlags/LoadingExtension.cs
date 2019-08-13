@@ -107,7 +107,8 @@ namespace MoreFlags
             new[] {"sw", "Star Wars Factions", "Galactic Empire, Rebel Alliance, First Order flag"},
             new[] {"uk", "United Kingdom", "Union Jack, Coat of Arms, England, Scotland, Wales, Nothern Ireland flags"},
             new[] {"un", "United Nations", "United Nations flag"},
-            new[] {"us", "United States", "United States flag"}
+            new[] {"us", "United States", "United States flag"},
+            new[] {"space", "Space Agencies", "Space Agencies flag"}
         };
 
         private static UITextureAtlas m_atlas;
