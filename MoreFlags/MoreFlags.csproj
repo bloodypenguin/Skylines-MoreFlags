@@ -279,7 +279,11 @@
     <EmbeddedResource Include="thumbs\flag_america_central2_thumbwall.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="flags\flag_space.png" />
+    <EmbeddedResource Include="flags\flag_space_lod.png" />
     <Content Include="lib\PrefabHook.dll" />
+    <EmbeddedResource Include="thumbs\flag_space_thumb.png" />
+    <EmbeddedResource Include="thumbs\flag_space_thumbwall.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
