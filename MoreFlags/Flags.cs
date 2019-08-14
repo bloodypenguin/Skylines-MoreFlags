@@ -83,7 +83,7 @@ namespace MoreFlags
                     new[]
                     {
                         "africa_north1", "Africa North #1",
-                        "Egypt, Lybia, Morocco, Tunisia, Algeria, Western Sahara flags"
+                        "Egypt, Libya, Morocco, Tunisia, Algeria, Western Sahara flags"
                     },
                     new[]
                     {
@@ -124,7 +124,7 @@ namespace MoreFlags
                     },
                     new[]
                     {
-                        "europe_south", "Europe South", "Greece, Georgia, Turkey, Armenia, Azerbadian, Cyprus flags"
+                        "europe_south", "Europe South", "Greece, Georgia, Turkey, Armenia, Azerbaijan, Cyprus flags"
                     },
                     new[]
                     {
