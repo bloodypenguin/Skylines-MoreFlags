@@ -196,6 +196,11 @@ namespace MoreFlags
                         "south_america", "Latin America #4",
                         "Brazil, Argentina, Colombia, Chile, Peru, Venezuela flags"
                     },
+                    new[]
+                    {
+                        "america_south2", "Latin America #5",
+                        "Bolivia, Ecuador, Guyana, Paraguay, Suriname, Uruguay flags"
+                    },
                 });
             }
 
