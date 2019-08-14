@@ -48,7 +48,6 @@ namespace MoreFlags
             }
 
             PropInfoHook.OnPreInitialization += OnPrePropInit;
-            PropInfoHook.OnPostInitialization += OnPostPropInit;
             PropInfoHook.Deploy();
         }
 
@@ -115,26 +114,6 @@ namespace MoreFlags
             }
         }
 
-        public void OnPostPropInit(PropInfo prop)
-        {
-            if (OptionsWrapper<Options>.Options.replacement == string.Empty)
-            {
-                return;
-            }
-
-            if (prop == null)
-            {
-                return;
-            }
-
-            if (prop.name != "flag_pole_wall" && prop.name != "flag_pole")
-            {
-                return;
-            }
-
-            ApplyRenderDistanceHack(prop);
-        }
-
         private static void Replace(PropInfo prop, Flag modification)
         {
             var material = prop.GetComponent<Renderer>().material;
@@ -153,8 +132,21 @@ namespace MoreFlags
             clone.name = name;
             instance.name = name;
             instance.transform.parent = gameObject.transform;
+
+            clone.m_lodObject = Object.Instantiate(prop.m_lodObject);
+            clone.m_lodObject.transform.parent = instance.transform;
+            clone.m_lodObject.name = prop.m_lodObject.name + $"_{modification.id}";
+            var renderer = clone.m_lodObject.GetComponent<MeshRenderer>();
+            Object.DestroyImmediate(renderer);
+            renderer = clone.m_lodObject.AddComponent<MeshRenderer>();
+            renderer.material= new Material(prop.m_lodObject.GetComponent<Renderer>().sharedMaterial)
+            {
+                mainTexture = modification.textureLod,
+                name = $"{prop.m_lodObject.GetComponent<Renderer>().sharedMaterial.name}_{modification.id}"
+            };
+            
             SetupMainMaterial(prop, modification, clone);
-            SetupLodMaterial(prop, modification);
+            SetupLodMaterial(prop, modification, clone);
 
             clone.m_placementStyle = ItemClass.Placement.Manual;
             clone.m_createRuining = false;
@@ -168,7 +160,6 @@ namespace MoreFlags
             }
 
             PrefabCollection<PropInfo>.InitializePrefabs("MoreFlags", new[] {clone}, null);
-            ApplyRenderDistanceHack(clone);
             AddLocale(modification, isWall, name);
             collection.flags.Add(clone);
             return clone;
@@ -185,21 +176,13 @@ namespace MoreFlags
             material.name = $"{prop.GetComponent<Renderer>().material.name}_{modification.id}";
         }
 
-        private static void SetupLodMaterial(PropInfo prop, Flag modification)
+        private static void SetupLodMaterial(PropInfo prop, Flag modification, PropInfo clone)
         {
-            var lodMaterial = prop.m_lodObject.GetComponent<Renderer>().material;
+            var lodMaterial = clone.m_lodObject.GetComponent<Renderer>().material;
             lodMaterial.mainTexture = modification.textureLod;
             lodMaterial.SetTexture("_XYSMap", Util.CloneTexture(lodMaterial, "_XYSMap", false));
             lodMaterial.SetTexture("_ACIMap", Util.CloneTexture(lodMaterial, "_ACIMap", false));
             lodMaterial.name = $"{prop.m_lodObject.GetComponent<Renderer>().material.name}_{modification.id}";
-        }
-
-
-        //hack to always render main model instad of LOD. Should be after initializing
-        private static void ApplyRenderDistanceHack(PropInfo flag)
-        {
-            flag.m_maxRenderDistance = 590;
-            flag.m_lodRenderDistance = 590;
         }
 
         private static void AddLocale(Flag modification, bool isWall, string name)
