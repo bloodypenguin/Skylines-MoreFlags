@@ -223,7 +223,7 @@ namespace MoreFlags
                     new[]
                     {
                         "uk", "United Kingdom",
-                        "Union Jack, Coat of Arms, England, Scotland, Wales, Nothern Ireland flags"
+                        "Union Jack, Coat of Arms, England, Scotland, Wales, Northern Ireland flags"
                     },
                     new[] {"us", "United States", "United States flag"},
                     new[]
