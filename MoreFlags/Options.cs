@@ -27,7 +27,7 @@ namespace MoreFlags
         [Checkbox("Flags of countries in Asia (w/o Commonwealth countries)", EnabledBuiltInPackages)]
         public bool Asia { get; set; } = true;
 
-        [Checkbox("Flags of countries in Europe flags (plus EU flag)", EnabledBuiltInPackages)]
+        [Checkbox("Flags of countries in Europe (plus EU flag)", EnabledBuiltInPackages)]
         public bool Europe { get; set; } = true;
 
         [Checkbox("Flags of fictional and historical entities", EnabledBuiltInPackages)]
