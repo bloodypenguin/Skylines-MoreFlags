@@ -157,7 +157,7 @@ namespace MoreFlags
                     new[]
                     {
                         "asia_middle_east1", "Asia Middle East #1",
-                        "Yemen, Israel, Jordan, Lebannon, Syria, Saudi Arabia flags"
+                        "Yemen, Israel, Jordan, Lebanon, Syria, Saudi Arabia flags"
                     },
                     new[]
                     {
