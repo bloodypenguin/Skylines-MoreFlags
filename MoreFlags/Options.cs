@@ -16,21 +16,21 @@ namespace MoreFlags
 
         public string replacement { set; get; }
 
-        [Checkbox("African flags", EnabledBuiltInPackages)] public bool Africa { get; set; } = true;
+        [Checkbox("Flags of countries in Africa", EnabledBuiltInPackages)] public bool Africa { get; set; } = true;
 
-        [Checkbox("American flags (w/o US & Canada)", EnabledBuiltInPackages)]
+        [Checkbox("Flags of countries in Latin America", EnabledBuiltInPackages)]
         public bool America { get; set; } = true;
 
         [Checkbox("Flags of US, UK & Commonwealth countries", EnabledBuiltInPackages)]
         public bool Anglophone { get; set; } = true;
 
-        [Checkbox("Asian flags (w/o Commonwealth countries)", EnabledBuiltInPackages)]
+        [Checkbox("Flags of countries in Asia (w/o Commonwealth countries)", EnabledBuiltInPackages)]
         public bool Asia { get; set; } = true;
 
-        [Checkbox("European flags (+EU)", EnabledBuiltInPackages)]
+        [Checkbox("Flags of countries in Europe flags (plus EU flag)", EnabledBuiltInPackages)]
         public bool Europe { get; set; } = true;
 
-        [Checkbox("Fictional and historical flags", EnabledBuiltInPackages)]
+        [Checkbox("Flags of fictional and historical entities", EnabledBuiltInPackages)]
         public bool Fictional { get; set; } = true;
 
         [Checkbox("Flags of movements & organisations", EnabledBuiltInPackages)]

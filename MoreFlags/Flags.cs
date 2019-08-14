@@ -178,22 +178,22 @@ namespace MoreFlags
                 {
                     new[]
                     {
-                        "central_america", "America Central #1",
+                        "central_america", "Latin America #1",
                         "Cuba, Mexico, Jamaica, Dominican Republic, Bahamas, Panama flags"
                     },
                     new[]
                     {
-                        "america_central2", "America Central #2",
+                        "america_central2", "Latin America #2",
                         "Honduras, Guatemala, Belize, Costa Rica, El Salvador, Nicaragua flags"
                     },
                     new[]
                     {
-                        "america_central3", "America Central #3",
+                        "america_central3", "Latin America #3",
                         "Haiti, Antigua and Barbuda, Trinidad and Tobago, Barbados, Grenada, Dominica flags"
                     },
                     new[]
                     {
-                        "south_america", "South America",
+                        "south_america", "Latin America #4",
                         "Brazil, Argentina, Colombia, Chile, Peru, Venezuela flags"
                     },
                 });
@@ -212,7 +212,7 @@ namespace MoreFlags
                     new[] {"mcu_teams", "Marvel Teams", "S.H.I.E.L.D, Avengers, X-Men flags"},
                     new[] {"sw", "Star Wars Factions", "Galactic Empire, Rebel Alliance, First Order flag"},
                     new[] {"su", "Soviet Union", "Soviet Union flag"},
-                    new[] {"jolly_rodger", "Jolly Rodger", "Jolly Rodger flag"},
+                    new[] {"jolly_rodger", "Jolly Rodger", "Yarr!"},
                 });
             }
 
@@ -242,7 +242,7 @@ namespace MoreFlags
                     new[] {"christian", "Christian", "Christian flag"},
                     new[] {"pace", "Peace", "Peace flag"},
                     new[] {"un", "United Nations", "United Nations flag"},
-                    new[] {"space", "Space Agencies", "Space Agencies flag"}
+                    new[] {"space", "Space Agencies", "NASA, ESA and JAXA flags"}
                 });
             }
 
