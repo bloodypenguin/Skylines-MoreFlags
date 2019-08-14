@@ -30,6 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Flags.cs" />
     <Compile Include="Flag.cs" />
     <Compile Include="FlagsCollection.cs" />
     <Compile Include="LoadingExtension.cs" />

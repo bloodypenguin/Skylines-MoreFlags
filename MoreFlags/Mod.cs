@@ -23,11 +23,12 @@ namespace MoreFlags
         {
             var group = helper.AddGroup("MoreFlags");
             var defaultIndex = 0;
+            var flags = Flags.CollectFlags(true);
             if (OptionsWrapper<Options>.Options.replacement != string.Empty)
             {
-                for (var i = 0; i < LoadingExtension.Flags.Count; i++)
+                for (var i = 0; i < flags.Count; i++)
                 {
-                    var flag = LoadingExtension.Flags[i];
+                    var flag = flags[i];
                     if (!flag.id.Equals(OptionsWrapper<Options>.Options.replacement))
                     {
                         continue;
@@ -43,9 +44,9 @@ namespace MoreFlags
             }
 
             group.AddDropdown("Replace stock Flags with",
-                new[] { "-----" }.Concat(LoadingExtension.Flags.Select(flag => flag.description)).ToArray(), defaultIndex, sel =>
+                new[] { "-----" }.Concat(flags.Select(flag => flag.description)).ToArray(), defaultIndex, sel =>
                  {
-                     OptionsWrapper<Options>.Options.replacement = sel == 0 ? string.Empty : LoadingExtension.Flags[sel - 1].id;
+                     OptionsWrapper<Options>.Options.replacement = sel == 0 ? string.Empty : flags[sel - 1].id;
                      OptionsWrapper<Options>.SaveOptions();
                  });
         }
